@@ -1,4 +1,5 @@
 package com.fsakura.llist;
+
 public class ListOperations {
 
 	public Node<Integer> reverse(Node<Integer> node) {

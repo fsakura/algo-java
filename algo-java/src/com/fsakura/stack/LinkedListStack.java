@@ -1,62 +1,57 @@
 package com.fsakura.stack;
 
-import java.util.Arrays;
 import java.util.EmptyStackException;
 
-public class ArrayStack<E> implements IStack<E> {
+import com.fsakura.llist.Node;
 
-	private E[] elements;
-	private int top;
-	private int capacity;
+public class LinkedListStack<E> implements IStack<E> {
 
-	@SuppressWarnings("unchecked")
-	public ArrayStack(int capacity) {
-		elements = (E[]) new Object[capacity];
-		this.capacity = capacity;
-		top = 0;
+	private int size;
+	private Node<E> top;
+
+	public LinkedListStack() {
+		this.size = 0;
+		top = null;
 	}
 
 	@Override
 	public E pop() throws EmptyStackException {
-		if (this.isEmpty())
+		if (isEmpty())
 			throw new EmptyStackException();
-		E e = elements[--top];
-		elements[top] = null;
+		E e = top.e;
+		top = top.next;
+		size--;
 		return e;
 	}
 
 	@Override
 	public void push(E e) {
-		if (top == capacity) {
-			ensurecapa();
-		}
-		elements[top++] = e;
-	}
-
-	private void ensurecapa() {
-		capacity = 2 * capacity;
-		elements = Arrays.copyOf(elements, capacity);
+		Node<E> oldTop = top;
+		top = new Node<E>();
+		top.e = e;
+		top.next = oldTop;
+		size++;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return top == 0;
+		return (null == top);
 	}
 
 	@Override
 	public int size() {
-		return top;
+		return size;
 	}
 
 	@Override
 	public E peek() throws EmptyStackException {
 		if (isEmpty())
 			throw new EmptyStackException();
-		return elements[top - 1];
+		return top.e;
 	}
 
-	public static void main(String[] args) throws Exception {
-		IStack<Integer> stack = new ArrayStack<Integer>(10);
+	public static void main(String[] args) {
+		IStack<Integer> stack = new LinkedListStack<Integer>();
 		for (int i = 0; i < 20; i++) {
 			stack.push(i);
 		}
